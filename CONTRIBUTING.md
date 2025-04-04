@@ -19,7 +19,7 @@ project and how to get started as a developer.
    make install
    
    # Or using uv
-   uv install -e ".[dev]"
+   uv pip install -e ".[dev]"
    
    # Or using pip
    pip install -e ".[dev]"
