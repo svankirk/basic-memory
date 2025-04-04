@@ -3,7 +3,6 @@
 from datetime import datetime
 from typing import List, Optional, Set
 
-from dateparser import parse
 from fastapi import BackgroundTasks
 from loguru import logger
 from sqlalchemy import text
@@ -13,6 +12,7 @@ from basic_memory.repository import EntityRepository
 from basic_memory.repository.search_repository import SearchRepository, SearchIndexRow
 from basic_memory.schemas.search import SearchQuery, SearchItemType
 from basic_memory.services import FileService
+from basic_memory.utils import parse_date
 
 
 class SearchService:
@@ -68,15 +68,8 @@ class SearchService:
 
         logger.debug(f"Searching with query: {query}")
 
-        after_date = (
-            (
-                query.after_date
-                if isinstance(query.after_date, datetime)
-                else parse(query.after_date)
-            )
-            if query.after_date
-            else None
-        )
+        # Parse the after_date using our new utility function
+        after_date = parse_date(query.after_date) if query.after_date else None
 
         # search
         results = await self.repository.search(
